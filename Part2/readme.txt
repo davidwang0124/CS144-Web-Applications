@@ -12,7 +12,7 @@ Relations:
 
 > 2. List all completely nontrivial functional dependencies that hold on each relation, excluding those that effectively specify keys.
 
-- Item: `ItemId -> Name, ItemId -> Category, ItemId -> Currently, ItemId -> Buy_Price, ItemId -> First_Bid, ItemId -> Number_of_Bids, ItemId -> Location.Name, ItemId -> Country, ItemId -> Started, ItemId -> Ends, ItemId -> Seller.UserID, ItemId -> Description; Location.Name -> Country`
+- Item: `ItemId -> Name, ItemId -> Currently, ItemId -> Buy_Price, ItemId -> First_Bid, ItemId -> Number_of_Bids, ItemId -> Location.Name, ItemId -> Country, ItemId -> Started, ItemId -> Ends, ItemId -> Seller.UserID, ItemId -> Description; Location.Name -> Country`
 - Bid: `Bidder.UserID, Time -> Amount`
 - Bidder: `UserID -> Rating, UserID -> Location.Name, UserID -> Country; Location.Name -> Country`
 - Location: `Name -> Latitude, Name -> Longtitude`
