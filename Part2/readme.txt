@@ -1,12 +1,12 @@
 ## Part B: Design your relational schema
 > 1. List your relations. Please specify all keys that hold on each relation. You need not specify attribute types at this stage.
 Relations:
-- Item (_ItemId_, Name, Category, Currently, Buy\_Price, First\_Bid, Number\_of\_Bids, Location.name, Country, Started, Ends, Seller.UserID, Description)
+- Item (__ItemId__, Name, Category, Currently, Buy\_Price, First\_Bid, Number\_of\_Bids, Location.name, Country, Started, Ends, Seller.UserID, Description)
 - Bids (ItemId, Bidder.UserID, Bidder.Time)
-- Bid (_Bidder.UserID_, _Time_, Amount)
-- Bidder (_UserID_, Rating, Location.name, Country)
-- Location (_name_, Latitude, Longtitude)
-- Seller (_UserID_, Rating)
+- Bid (__Bidder.UserID__, __Time__, Amount)
+- Bidder (__UserID__, Rating, Location.name, Country)
+- Location (__name__, Latitude, Longtitude)
+- Seller (__UserID__, Rating)
 
 > 2. List all completely nontrivial functional dependencies that hold on each relation, excluding those that effectively specify keys.
 
