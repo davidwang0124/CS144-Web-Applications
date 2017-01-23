@@ -2,7 +2,8 @@
 > 1. List your relations. Please specify all keys that hold on each relation. You need not specify attribute types at this stage.
 
 Relations:
-- Item (__ItemId__, Name, Category, Currently, Buy\_Price, First\_Bid, Number\_of\_Bids, Location.Name, Country, Started, Ends, Seller.UserID, Description)
+- Item (__ItemId__, Name, Currently, Buy\_Price, First\_Bid, Number\_of\_Bids, Location.Name, Country, Started, Ends, Seller.UserID, Description)
+- ItemCategory (ItemID, Category)
 - Bids (ItemId, Bidder.UserID, Bidder.Time)
 - Bid (__Bidder.UserID__, __Time__, Amount)
 - Bidder (__UserID__, Rating, Location.Name, Country)
