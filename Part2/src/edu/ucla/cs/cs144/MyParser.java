@@ -147,13 +147,14 @@ class MyParser {
      * like $3,453.23. Returns the input if the input is an empty string.
      */
     static String strip(String money) {
-        if (money.equals(""))
+        if (money.equals("") || money.equals("NULL"))
             return money;
         else {
             double am = 0.0;
             NumberFormat nf = NumberFormat.getCurrencyInstance(Locale.US);
             try { am = nf.parse(money).doubleValue(); }
             catch (ParseException e) {
+                e.printStackTrace();
                 System.out.println("This method should work for all " +
                                    "money values you find in our data.");
                 System.exit(20);
@@ -209,17 +210,46 @@ class MyParser {
             writeItem(item);
         }
         // close open files
-        try {
-            closeCSVFile(itemWriter);
-            closeCSVFile(itemCategoryWriter);
-            closeCSVFile(bidsWriter);
-            closeCSVFile(userWriter);
-        } catch(IOException e) {
-            e.printStackTrace();
-        }
+        closeCSVFile(itemWriter);
+        closeCSVFile(itemCategoryWriter);
+        closeCSVFile(bidsWriter);
+        closeCSVFile(userWriter);
     }
     static void writeItem(Element ele) {
+        // write Item table
+        StringBuilder itemTupleBuilder = new StringBuilder();
 
+        String itemID = ele.getAttribute("ItemID");
+        itemTupleBuilder.append(itemID).append(",");
+
+        String name = getElementTextByTagNameNR(ele, "Name");
+        itemTupleBuilder.append(name).append(",");
+
+        String currently = strip(getElementTextByTagNameNR(ele, "Currently"));
+        itemTupleBuilder.append(currently).append(",");
+
+        String buyPrice = strip(getOptionalElementTextByTagNameNR(ele, "Buy_Price"));
+        itemTupleBuilder.append(buyPrice).append(",");
+
+        String firstBid = strip(getElementTextByTagNameNR(ele, "First_Bid"));
+        itemTupleBuilder.append(firstBid).append(",");
+
+        String numberOfBids = getElementTextByTagNameNR(ele, "Number_of_Bids");
+        itemTupleBuilder.append(numberOfBids).append(",");
+
+        Element locationElement = getElementByTagNameNR(ele, "Location");
+
+        String locationName = getElementText(locationElement);
+        itemTupleBuilder.append(locationName).append(",");
+        // TODO:Latitude, Longtitude, Country, Started, Ends, UserID, Description
+
+        writeTuple(itemWriter, itemTupleBuilder.toString());
+
+        // write itemCategory table
+
+        // write bids
+
+        // write user
     }
     static FileWriter createCSVFile(String fileName) {
         FileWriter writer = null;
@@ -232,8 +262,32 @@ class MyParser {
         return writer;
     }
     static void closeCSVFile(FileWriter w) {
-        w.flush();
-        w.close();
+        try {
+            w.flush();
+            w.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    static void writeTuple(FileWriter w, String line) {
+        try {
+            w.append(line + '\n');
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    /* Returns the text (#PCDATA) associated with the first subelement X
+     * of e with the given tagName. If no such X exists or X contains no
+     * text, "NULL" is returned. NR means Non-Recursive.
+     */
+    static String getOptionalElementTextByTagNameNR(Element e, String tagName) {
+        Element elem = getElementByTagNameNR(e, tagName);
+        if (elem != null && elem.getChildNodes().getLength() == 1) {
+            Text elementText = (Text) elem.getFirstChild();
+            return elementText.getNodeValue();
+        } else {
+            return "NULL";
+        }
     }
 
     public static void main (String[] args) {
