@@ -246,10 +246,56 @@ class MyParser {
         writeTuple(itemWriter, itemTupleBuilder.toString());
 
         // write itemCategory table
+        Element[] categories = getElementsByTagNameNR(ele, "Category");
+        for (Element categoryElem : categories) {
+            String category = getElementText(categoryElem);
+            String itemCategoryTuple = itemID + "," + category;
+            writeTuple(itemCategoryWriter, itemCategoryTuple);
+        }
 
         // write bids
+        Element bidsElement = getElementByTagNameNR(ele, "Bids");
+        Element[] bidElements = getElementsByTagNameNR(bidsElement, "Bid");
+        for (Element bid : bidElements) {
+            StringBuilder bidBuilder = new StringBuilder();
+
+            Element bidderElement = getElementByTagNameNR(bid, "Bidder");
+            writeBidderTuple(bidderElement);
+
+            String bidUserID = bidderElement.getAttribute("UserID");
+            bidBuilder.append(bidUserID).append(",");
+
+            // TODO: format of time
+            String time = getElementTextByTagNameNR(bid, "Time");
+            bidBuilder.append(time).append(",");
+
+            String amount = strip(getElementTextByTagNameNR(bid, "Amount"));
+            bidBuilder.append(amount);
+
+            writeTuple(bidsWriter, bidBuilder.toString());
+        }
 
         // write user
+        StringBuilder sellerBuilder = new StringBuilder();
+        Element sellerElement = getElementByTagNameNR(ele, "Seller");
+        String sellerID = sellerElement.getAttribute("UserID");
+        sellerBuilder.append(sellerID).append(",");
+        String rating = sellerElement.getAttribute("Rating");
+        sellerBuilder.append(rating).append(",");
+        sellerBuilder.append("NULL,NULL");
+        writeTuple(userWriter, sellerBuilder.toString());
+    }
+    static void writeBidderTuple(Element bidderElem) {
+        StringBuilder bidderBuilder = new StringBuilder();
+        String userID = bidderElem.getAttribute("UserID");
+        bidderBuilder.append(userID).append(",");
+        String rating = bidderElem.getAttribute("Rating");
+        bidderBuilder.append(rating).append(",");
+        String location = getElementTextByTagNameNR(bidderElem, "Location");
+        bidderBuilder.append(location).append(",");
+        String country = getElementTextByTagNameNR(bidderElem, "Country");
+        bidderBuilder.append(country);
+        writeTuple(userWriter, bidderBuilder.toString());
     }
     static FileWriter createCSVFile(String fileName) {
         FileWriter writer = null;
