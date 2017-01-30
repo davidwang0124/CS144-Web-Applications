@@ -42,10 +42,10 @@ import org.xml.sax.ErrorHandler;
 
 
 class MyParser {
-    
+
     static final String columnSeparator = "|*|";
     static DocumentBuilder builder;
-    
+
     static final String[] typeName = {
 	"none",
 	"Element",
@@ -61,19 +61,24 @@ class MyParser {
 	"DocFragment",
 	"Notation",
     };
-    
+
+    static FileWriter itemWriter;
+    static FileWriter itemCategoryWriter;
+    static FileWriter bidsWriter;
+    static FileWriter userWriter;
+
     static class MyErrorHandler implements ErrorHandler {
-        
+
         public void warning(SAXParseException exception)
         throws SAXException {
             fatalError(exception);
         }
-        
+
         public void error(SAXParseException exception)
         throws SAXException {
             fatalError(exception);
         }
-        
+
         public void fatalError(SAXParseException exception)
         throws SAXException {
             exception.printStackTrace();
@@ -81,9 +86,9 @@ class MyParser {
                                "in the supplied XML files.");
             System.exit(3);
         }
-        
+
     }
-    
+
     /* Non-recursive (NR) version of Node.getElementsByTagName(...)
      */
     static Element[] getElementsByTagNameNR(Element e, String tagName) {
@@ -100,7 +105,7 @@ class MyParser {
         elements.copyInto(result);
         return result;
     }
-    
+
     /* Returns the first subelement of e matching the given tagName, or
      * null if one does not exist. NR means Non-Recursive.
      */
@@ -113,7 +118,7 @@ class MyParser {
         }
         return null;
     }
-    
+
     /* Returns the text associated with the given element (which must have
      * type #PCDATA) as child, or "" if it contains no text.
      */
@@ -125,7 +130,7 @@ class MyParser {
         else
             return "";
     }
-    
+
     /* Returns the text (#PCDATA) associated with the first subelement X
      * of e with the given tagName. If no such X exists or X contains no
      * text, "" is returned. NR means Non-Recursive.
@@ -137,7 +142,7 @@ class MyParser {
         else
             return "";
     }
-    
+
     /* Returns the amount (in XXXXX.xx format) denoted by a money-string
      * like $3,453.23. Returns the input if the input is an empty string.
      */
@@ -157,7 +162,7 @@ class MyParser {
             return nf.format(am).substring(1);
         }
     }
-    
+
     /* Process one items-???.xml file.
      */
     static void processFile(File xmlFile) {
@@ -175,43 +180,85 @@ class MyParser {
             e.printStackTrace();
             System.exit(3);
         }
-        
+
         /* At this point 'doc' contains a DOM representation of an 'Items' XML
          * file. Use doc.getDocumentElement() to get the root Element. */
         System.out.println("Successfully parsed - " + xmlFile);
-        
+
         /* Fill in code here (you will probably need to write auxiliary
             methods). */
-        
-        
-        
+
+        writeTableFiles(doc.getDocumentElement());
+
         /**************************************************************/
-        
+
     }
-    
+
+    public static void writeTableFiles(Element ele) {
+        // creating files
+        itemWriter = createCSVFile("item.csv");
+        itemCategoryWriter = createCSVFile("itemCategory.csv");
+        bidsWriter = createCSVFile("bids.csv");
+        userWriter = createCSVFile("user.csv");
+        System.out.println("Successfully created csv files");
+        // get all Item tags
+        Element[] itemList = getElementsByTagNameNR(ele, "Item");
+        System.out.println("There are " + itemList.length + "<Item> tags");
+        // process each Item
+        for (Element item : itemList) {
+            writeItem(item);
+        }
+        // close open files
+        try {
+            closeCSVFile(itemWriter);
+            closeCSVFile(itemCategoryWriter);
+            closeCSVFile(bidsWriter);
+            closeCSVFile(userWriter);
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
+    }
+    static void writeItem(Element ele) {
+
+    }
+    static FileWriter createCSVFile(String fileName) {
+        FileWriter writer = null;
+        try {
+            writer = new FileWriter(fileName, true);
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.exit(3);
+        }
+        return writer;
+    }
+    static void closeCSVFile(FileWriter w) {
+        w.flush();
+        w.close();
+    }
+
     public static void main (String[] args) {
         if (args.length == 0) {
             System.out.println("Usage: java MyParser [file] [file] ...");
             System.exit(1);
         }
-        
+
         /* Initialize parser. */
         try {
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             factory.setValidating(false);
-            factory.setIgnoringElementContentWhitespace(true);      
+            factory.setIgnoringElementContentWhitespace(true);
             builder = factory.newDocumentBuilder();
             builder.setErrorHandler(new MyErrorHandler());
         }
         catch (FactoryConfigurationError e) {
             System.out.println("unable to get a document builder factory");
             System.exit(2);
-        } 
+        }
         catch (ParserConfigurationException e) {
             System.out.println("parser was unable to be configured");
             System.exit(2);
         }
-        
+
         /* Process all files listed on command line. */
         for (int i = 0; i < args.length; i++) {
             File currentFile = new File(args[i]);
