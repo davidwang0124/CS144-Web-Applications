@@ -216,32 +216,61 @@ class MyParser {
         closeCSVFile(userWriter);
     }
     static void writeItem(Element ele) {
+        // write user
+        StringBuilder sellerBuilder = new StringBuilder();
+        Element sellerElement = getElementByTagNameNR(ele, "Seller");
+        String sellerID = sellerElement.getAttribute("UserID");
+        sellerBuilder.append(sellerID).append(" -|- ");
+        String rating = sellerElement.getAttribute("Rating");
+        sellerBuilder.append(rating).append(" -|- ");
+        sellerBuilder.append("NULL -|- NULL");
+        writeTuple(userWriter, sellerBuilder.toString());
+
         // write Item table
         StringBuilder itemTupleBuilder = new StringBuilder();
 
         String itemID = ele.getAttribute("ItemID");
-        itemTupleBuilder.append(itemID).append(",");
+        itemTupleBuilder.append(itemID).append(" -|- ");
 
         String name = getElementTextByTagNameNR(ele, "Name");
-        itemTupleBuilder.append(name).append(",");
+        itemTupleBuilder.append(name).append(" -|- ");
 
         String currently = strip(getElementTextByTagNameNR(ele, "Currently"));
-        itemTupleBuilder.append(currently).append(",");
+        itemTupleBuilder.append(currently).append(" -|- ");
 
         String buyPrice = strip(getOptionalElementTextByTagNameNR(ele, "Buy_Price"));
-        itemTupleBuilder.append(buyPrice).append(",");
+        itemTupleBuilder.append(buyPrice).append(" -|- ");
 
         String firstBid = strip(getElementTextByTagNameNR(ele, "First_Bid"));
-        itemTupleBuilder.append(firstBid).append(",");
+        itemTupleBuilder.append(firstBid).append(" -|- ");
 
         String numberOfBids = getElementTextByTagNameNR(ele, "Number_of_Bids");
-        itemTupleBuilder.append(numberOfBids).append(",");
+        itemTupleBuilder.append(numberOfBids).append(" -|- ");
 
         Element locationElement = getElementByTagNameNR(ele, "Location");
 
         String locationName = getElementText(locationElement);
-        itemTupleBuilder.append(locationName).append(",");
-        // TODO:Latitude, Longtitude, Country, Started, Ends, UserID, Description
+        itemTupleBuilder.append(locationName).append(" -|- ");
+
+        String latitude = locationElement.getAttribute("Latitude");
+        itemTupleBuilder.append(latitude).append(" -|- ");
+
+        String longtitude = locationElement.getAttribute("Longtitude");
+        itemTupleBuilder.append(longtitude).append(" -|- ");
+
+        String country = getElementTextByTagNameNR(ele, "Country");
+        itemTupleBuilder.append(country).append(" -|- ");
+
+        String started = convertToSQLTime(getElementTextByTagNameNR(ele, "Started"));
+        itemTupleBuilder.append(started).append(" -|- ");
+        String ends = convertToSQLTime(getElementTextByTagNameNR(ele, "Ends"));
+        itemTupleBuilder.append(ends).append(" -|- ");
+
+        itemTupleBuilder.append(sellerID).append(" -|- ");
+
+        String description = getElementTextByTagNameNR(ele, "Description");
+        description = description.substring(0, Math.min(description.length(), 4000));
+        itemTupleBuilder.append(description);
 
         writeTuple(itemWriter, itemTupleBuilder.toString());
 
@@ -249,7 +278,7 @@ class MyParser {
         Element[] categories = getElementsByTagNameNR(ele, "Category");
         for (Element categoryElem : categories) {
             String category = getElementText(categoryElem);
-            String itemCategoryTuple = itemID + "," + category;
+            String itemCategoryTuple = itemID + " -|- " + category;
             writeTuple(itemCategoryWriter, itemCategoryTuple);
         }
 
@@ -263,36 +292,25 @@ class MyParser {
             writeBidderTuple(bidderElement);
 
             String bidUserID = bidderElement.getAttribute("UserID");
-            bidBuilder.append(bidUserID).append(",");
+            bidBuilder.append(bidUserID).append(" -|- ");
 
-            // TODO: format of time
-            String time = getElementTextByTagNameNR(bid, "Time");
-            bidBuilder.append(time).append(",");
+            String time = convertToSQLTime(getElementTextByTagNameNR(bid, "Time"));
+            bidBuilder.append(time).append(" -|- ");
 
             String amount = strip(getElementTextByTagNameNR(bid, "Amount"));
             bidBuilder.append(amount);
 
             writeTuple(bidsWriter, bidBuilder.toString());
         }
-
-        // write user
-        StringBuilder sellerBuilder = new StringBuilder();
-        Element sellerElement = getElementByTagNameNR(ele, "Seller");
-        String sellerID = sellerElement.getAttribute("UserID");
-        sellerBuilder.append(sellerID).append(",");
-        String rating = sellerElement.getAttribute("Rating");
-        sellerBuilder.append(rating).append(",");
-        sellerBuilder.append("NULL,NULL");
-        writeTuple(userWriter, sellerBuilder.toString());
     }
     static void writeBidderTuple(Element bidderElem) {
         StringBuilder bidderBuilder = new StringBuilder();
         String userID = bidderElem.getAttribute("UserID");
-        bidderBuilder.append(userID).append(",");
+        bidderBuilder.append(userID).append(" -|- ");
         String rating = bidderElem.getAttribute("Rating");
-        bidderBuilder.append(rating).append(",");
+        bidderBuilder.append(rating).append(" -|- ");
         String location = getElementTextByTagNameNR(bidderElem, "Location");
-        bidderBuilder.append(location).append(",");
+        bidderBuilder.append(location).append(" -|- ");
         String country = getElementTextByTagNameNR(bidderElem, "Country");
         bidderBuilder.append(country);
         writeTuple(userWriter, bidderBuilder.toString());
@@ -334,6 +352,22 @@ class MyParser {
         } else {
             return "NULL";
         }
+    }
+    /** Return SQL TIMESTAMP data
+     * 'Dec-15-01 14:13:37' => '2001-12-15 14:13:37'
+     */
+    static String convertToSQLTime(String xmlTime) {
+        SimpleDateFormat xmlFormat = new SimpleDateFormat("MMM-dd-yy HH:mm:ss");
+        SimpleDateFormat sqlFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String ts = "";
+        try {
+            Date inputDate = xmlFormat.parse(xmlTime);
+            ts = sqlFormat.format(inputDate);
+        } catch(ParseException pe) {
+            System.out.println("ERROR: could not parse \"" + xmlTime + "\"");
+            System.exit(3);
+        }
+        return ts;
     }
 
     public static void main (String[] args) {
