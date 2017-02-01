@@ -5,15 +5,13 @@
 -- - Seller (__UserID__, Rating, Location, Country)
 -- - Bidder (__UserID__, Rating, Location, Country)
 create table Seller (
-  UserID INTEGER NOT NULL,
+  UserID VARCHAR(50),
   Rating	INTEGER DEFAULT 0,
-  Location 	VARCHAR(50),
-  Country		VARCHAR(50),
   PRIMARY KEY (UserID)
 );
 
 create table Bidder (
-  UserID INTEGER NOT NULL,
+  UserID VARCHAR(50),
   Rating	INTEGER DEFAULT 0,
   Location 	VARCHAR(50),
   Country		VARCHAR(50),

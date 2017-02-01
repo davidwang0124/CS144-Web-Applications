@@ -225,8 +225,7 @@ class MyParser {
         String sellerID = sellerElement.getAttribute("UserID");
         sellerBuilder.append(sellerID).append(" -|- ");
         String rating = sellerElement.getAttribute("Rating");
-        sellerBuilder.append(rating).append(" -|- ");
-        sellerBuilder.append("NULL -|- NULL");
+        sellerBuilder.append(rating);
         writeTuple(sellerWriter, sellerBuilder.toString());
 
         // write Item table
