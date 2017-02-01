@@ -64,8 +64,9 @@ class MyParser {
 
     static FileWriter itemWriter;
     static FileWriter itemCategoryWriter;
-    static FileWriter bidsWriter;
-    static FileWriter userWriter;
+    static FileWriter bidWriter;
+    static FileWriter sellerWriter;
+    static FileWriter bidderWriter;
 
     static class MyErrorHandler implements ErrorHandler {
 
@@ -199,8 +200,9 @@ class MyParser {
         // creating files
         itemWriter = createCSVFile("item.csv");
         itemCategoryWriter = createCSVFile("itemCategory.csv");
-        bidsWriter = createCSVFile("bids.csv");
-        userWriter = createCSVFile("user.csv");
+        bidWriter = createCSVFile("bids.csv");
+        sellerWriter = createCSVFile("seller.csv");
+        bidderWriter = createCSVFile("bidder.csv");
         System.out.println("Successfully created csv files");
         // get all Item tags
         Element[] itemList = getElementsByTagNameNR(ele, "Item");
@@ -212,8 +214,9 @@ class MyParser {
         // close open files
         closeCSVFile(itemWriter);
         closeCSVFile(itemCategoryWriter);
-        closeCSVFile(bidsWriter);
-        closeCSVFile(userWriter);
+        closeCSVFile(bidWriter);
+        closeCSVFile(sellerWriter);
+        closeCSVFile(bidderWriter);
     }
     static void writeItem(Element ele) {
         // write user
@@ -224,7 +227,7 @@ class MyParser {
         String rating = sellerElement.getAttribute("Rating");
         sellerBuilder.append(rating).append(" -|- ");
         sellerBuilder.append("NULL -|- NULL");
-        writeTuple(userWriter, sellerBuilder.toString());
+        writeTuple(sellerWriter, sellerBuilder.toString());
 
         // write Item table
         StringBuilder itemTupleBuilder = new StringBuilder();
@@ -300,7 +303,7 @@ class MyParser {
             String amount = strip(getElementTextByTagNameNR(bid, "Amount"));
             bidBuilder.append(amount);
 
-            writeTuple(bidsWriter, bidBuilder.toString());
+            writeTuple(bidWriter, bidBuilder.toString());
         }
     }
     static void writeBidderTuple(Element bidderElem) {
@@ -313,7 +316,7 @@ class MyParser {
         bidderBuilder.append(location).append(" -|- ");
         String country = getElementTextByTagNameNR(bidderElem, "Country");
         bidderBuilder.append(country);
-        writeTuple(userWriter, bidderBuilder.toString());
+        writeTuple(bidderWriter, bidderBuilder.toString());
     }
     static FileWriter createCSVFile(String fileName) {
         FileWriter writer = null;
