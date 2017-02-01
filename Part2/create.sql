@@ -4,6 +4,21 @@
 -- - Bid (__UserID__, __Time__, ItemID, Amount)
 -- - Seller (__UserID__, Rating, Location, Country)
 -- - Bidder (__UserID__, Rating, Location, Country)
+create table Seller (
+  UserID INTEGER NOT NULL,
+  Rating	INTEGER DEFAULT 0,
+  Location 	VARCHAR(50),
+  Country		VARCHAR(50),
+  PRIMARY KEY (UserID)
+);
+
+create table Bidder (
+  UserID INTEGER NOT NULL,
+  Rating	INTEGER DEFAULT 0,
+  Location 	VARCHAR(50),
+  Country		VARCHAR(50),
+  PRIMARY KEY (UserID)
+);
 
 create table Item (
   ItemID 	INTEGER NOT NULL,
@@ -21,7 +36,7 @@ create table Item (
   UserID 		INTEGER NOT NULL,
   Description	VARCHAR(4000),
   PRIMARY KEY (ItemID),
-  FOREIGN KEY (UserID) REFERENCES User(UserID)
+  FOREIGN KEY (UserID) REFERENCES Seller(UserID)
 );
 
 create table ItemCategory (
@@ -38,21 +53,5 @@ create table Bid (
   Amount 	DECIMAL(8,2) NOT NULL,
   PRIMARY KEY (UserID, Time),
   FOREIGN KEY (ItemID) REFERENCES Item(ItemID),
-  FOREIGN KEY (UserID) REFERENCES User(UserID)
-);
-
-create table Seller (
-  UserID INTEGER NOT NULL,
-  Rating	INTEGER DEFAULT 0,
-  Location 	VARCHAR(50),
-  Country		VARCHAR(50),
-  PRIMARY KEY (UserID)
-);
-
-create table Bidder (
-  UserID INTEGER NOT NULL,
-  Rating	INTEGER DEFAULT 0,
-  Location 	VARCHAR(50),
-  Country		VARCHAR(50),
-  PRIMARY KEY (UserID)
+  FOREIGN KEY (UserID) REFERENCES Bidder(UserID)
 );
