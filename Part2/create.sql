@@ -1,8 +1,9 @@
 -- - Item (__ItemID__, Name, Currently, Buy\_Price, First\_Bid, Number\_of\_Bids,
--- 		Location, Latitude, Longtitude, Country, Started, Ends, UserID, Description)
+-- - Location, Latitude, Longtitude, Country, Started, Ends, UserID, Description)
 -- - ItemCategory (__ItemID__,__Category__)
 -- - Bid (__UserID__,__Time__, ItemID, Amount)
--- - User (__UserID__, Seller_Rating, Buyer_Rating, Location, Country)
+-- - Seller (__UserID__, Rating, Location, Country)
+-- - Bidder (__UserID__, Rating, Location, Country)
 
 create table Item (
 	ItemID 	INTEGER NOT NULL,
@@ -40,10 +41,17 @@ create table Bid (
     FOREIGN KEY (UserID) REFERENCES User(UserID)
 );
 
-create table User (
+create table Seller (
 	UserID INTEGER NOT NULL,
-	Seller_Rating	INTEGER DEFAULT 0, 
-	Buyer_Rating 	INTEGER DEFAULT 0,
+	Rating	INTEGER DEFAULT 0,
+	Location 	VARCHAR(50),
+	Country		VARCHAR(50),
+	PRIMARY KEY (UserID)
+);
+
+create table Bidder (
+	UserID INTEGER NOT NULL,
+	Rating	INTEGER DEFAULT 0,
 	Location 	VARCHAR(50),
 	Country		VARCHAR(50),
 	PRIMARY KEY (UserID)
