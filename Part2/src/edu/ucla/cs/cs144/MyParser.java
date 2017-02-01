@@ -302,6 +302,8 @@ class MyParser {
             String time = convertToSQLTime(getElementTextByTagNameNR(bid, "Time"));
             bidBuilder.append(time).append(" -|- ");
 
+            bidBuilder.append(itemID).append(" -|- ");
+
             String amount = strip(getElementTextByTagNameNR(bid, "Amount"));
             bidBuilder.append(amount);
 
