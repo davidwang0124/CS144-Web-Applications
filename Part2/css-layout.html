@@ -1,9 +1,9 @@
 <!DOCTYPE HTML>
 <html>
-	<head> 
+	<head>
 	<style>
 	.header {
-		position: absolute;
+		position: fixed;
 		font-size: 35pt;
 		background-color: yellow;
 		height: 80px;
@@ -16,7 +16,7 @@
 		width: 100%;
 	}
 	.footer {
-		position: absolute;
+		position: fixed;
 		height: 1em;
 		right: 0;
 		bottom: 0;
@@ -25,21 +25,22 @@
 		text-align: right;
 	}
 	.box {
-   		height: calc(100% - 80px);
-		position: fixed;
+		height: calc(100% - 80px);
+		position: absolute;
 		top: 80px;
-		margin-left: 1em;
-		margin-right: 1em;
+		margin: 0;
 		overflow: auto;
 	}
 	.box1 {
-		width: calc(50% - 0.5em);
+		max-width: calc(50% - 1.5em);
+		margin: 0 0.5em 0 1em;
 		float: left;
 	}
 	.box2 {
-		width: calc(50% - 0.5em);
+		max-width: calc(50% - 1.5em);
+		margin: 0 1em 0 0.5em;
 		float: right;
-	} 
+	}
 	</style>
 	</head>
 
@@ -73,9 +74,9 @@
 		integrity, with special attention to cheating, plagiarism, and student
 		discipline. The policy summaries don't specifically address programming
 		assignments in detail, so we state our policy here.
-		In order to earn any points on your coursework, you must turn in <a href="integrity-agreement.pdf">this signed agreement</a>. 
+		In order to earn any points on your coursework, you must turn in <a href="integrity-agreement.pdf">this signed agreement</a>.
 		</p><p>
-		Each of you is expected to submit your own original work, or the original work of your two-student team in the project. On many occasions it may be useful and have an educational value to ask others (the instructor, the TA, or other students) for hints or help, or to talk generally about programming strategies. Such activity is both acceptable and encouraged, but you must indicate any assistance (human or otherwise) that you received. Any assistance received that is not given proper citation will be considered plagiarism. 
+		Each of you is expected to submit your own original work, or the original work of your two-student team in the project. On many occasions it may be useful and have an educational value to ask others (the instructor, the TA, or other students) for hints or help, or to talk generally about programming strategies. Such activity is both acceptable and encouraged, but you must indicate any assistance (human or otherwise) that you received. Any assistance received that is not given proper citation will be considered plagiarism.
 		So where do we draw the line?  We'll decide each case on its merits, but here are some
 		categorizations:
 
@@ -100,7 +101,7 @@
 		<li>Using project solutions from earlier offerings of this or any other
 		class</li>
 		<li>Soliciting help from an online source where not all potential respondents
-		are subject to the 
+		are subject to the
 		<a href="http://www.deanofstudents.ucla.edu/assets/documents/StudentCC.pdf"
 		target="_blank">UCLA Student Conduct Code</a></li>
 		<li>Receiving from another person (other than the instructor or a TA) a code fragment that solves any portion of a programming assignment</li>
@@ -125,11 +126,11 @@
 		procedures, we will have to submit the case to the Dean.
 		A typical penalty for a first plagiarism offense is
 		 suspension for one or more quarters.  A second offense usually
-		 results in dismissal from the University of California. 
+		 results in dismissal from the University of California.
 		</p>
 	</div>
 	</div>
-	
+
 	<div class="footer">
 		&copy; Copyright by University of California, Los Angeles (UCLA)
 	</div>
