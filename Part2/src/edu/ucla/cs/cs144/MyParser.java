@@ -256,9 +256,11 @@ class MyParser {
         itemTupleBuilder.append(locationName).append(" -|- ");
 
         String latitude = locationElement.getAttribute("Latitude");
+        latitude = latitude.equals("") ? "NULL" : latitude;
         itemTupleBuilder.append(latitude).append(" -|- ");
 
         String longtitude = locationElement.getAttribute("Longtitude");
+        longtitude = longtitude.equals("") ? "NULL" : longtitude;
         itemTupleBuilder.append(longtitude).append(" -|- ");
 
         String country = getElementTextByTagNameNR(ele, "Country");

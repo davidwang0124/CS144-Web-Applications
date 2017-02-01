@@ -28,3 +28,4 @@ mysql CS144 < load.sql
 echo "Tuples loaded"
 
 # Remove all temporary files
+rm *.csv
