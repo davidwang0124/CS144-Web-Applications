@@ -12,20 +12,22 @@ create table Item (
 	First_Bid	DECIMAL(8,2) NOT NULL,
 	Number_of_Bids	INTEGER,
 	Location	VARCHAR(50) NOT NULL,
-	Latitude	DECIMAL(9,6) NOT NULL,
-	Longtitude	DECIMAL(9,6) NOT NULL,
+	Latitude	DECIMAL(9,6),
+	Longtitude	DECIMAL(9,6),
 	Country		VARCHAR(50)	NOT NULL,
 	Started		TIMESTAMP NOT NULL,
 	Ends		TIMESTAMP NOT NULL,
 	UserID 		INTEGER NOT NULL,
 	Description	VARCHAR(4000),
-	PRIMARY KEY (ItemID)
+	PRIMARY KEY (ItemID),
+	FOREIGN KEY (UserID) REFERENCES User(UserID)
 );
 
 create table ItemCategory (
 	ItemID 	INTEGER NOT NULL,
 	Category VARCHAR(60) NOT NULL,
-	PRIMARY KEY (ItemID, Category)
+	PRIMARY KEY (ItemID, Category),
+	FOREIGN KEY (ItemID) REFERENCES Item(ItemID)
 );
 
 create table Bid (
@@ -40,9 +42,9 @@ create table Bid (
 
 create table User (
 	UserID INTEGER NOT NULL,
-	Seller_Rating	INTEGER, 
-	Buyer_Rating 	INTEGER,
-	Location 	VARCHAR(50) NOT NULL,
-	Country		VARCHAR(50) NOT NULL
+	Seller_Rating	INTEGER DEFAULT 0, 
+	Buyer_Rating 	INTEGER DEFAULT 0,
+	Location 	VARCHAR(50),
+	Country		VARCHAR(50),
 	PRIMARY KEY (UserID)
 );
