@@ -1,5 +1,5 @@
 -- Find the number of users in the database.
-SELECT Count(*) FROM
+SELECT COUNT(*) FROM
 (
   SELECT UserID FROM Seller
   UNION
@@ -7,6 +7,10 @@ SELECT Count(*) FROM
 )
 
 -- Find the number of items in "New York", (i.e., items whose location is exactly the string "New York"). Pay special attention to case sensitivity. You should match the items in "New York" but not in "new york".
+SELECT COUNT(*)
+FROM Item
+WHERE Location LIKE 'New York';
+
 
 -- Find the number of auctions belonging to exactly four categories.
 
