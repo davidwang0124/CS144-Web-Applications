@@ -29,18 +29,21 @@ AND Started < "2001-12-20 00:00:00"
 AND NumberofBids > 0;
 
 -- Find the number of sellers whose rating is higher than 1000.
-SELECT count(UserID)
+SELECT count(*)
 FROM Seller
 WHERE Rating > 1000;
 
 -- Find the number of users who are both sellers and bidders.
 SELECT count(*)
-FROM (SELECT * FROM Seller, Bidder
-      WHERE Seller.UserID = Bidder.UserID) T;
+FROM Seller
+WHERE UserID IN (SELECT UserID FROM Bid);
 
 -- Find the number of categories that include at least one item with a bid of more than $100.
 SELECT count(*)
-FROM Bid, ItemCategory
-WHERE Bid.ItemID = ItemCategory.ItemID
-AND Bid.Amount > 100
-GROUP BY ItemCategory.Category;
+FROM (SELECT ItemCategory.Category FROM Bid, ItemCategory
+	  WHERE Bid.ItemID = ItemCategory.ItemID
+	  AND Bid.Amount > 100
+  	  GROUP BY ItemCategory.Category) T;
+
+
+
