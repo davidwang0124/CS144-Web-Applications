@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# Remove all temporary files if exits
+for f in *.csv
+do
+  rm "$f";
+done
+
 # Run the drop.sql batch file to drop existing tables
 # Inside the drop.sql, you sould check whether the table exists. Drop them ONLY if they exists.
 mysql CS144 < drop.sql
@@ -28,8 +34,7 @@ mysql CS144 < load.sql
 echo "Tuples loaded"
 
 # Run the queries.sql batch file to test queries
-mysql CS144 < queries.sql
-echo "queries done"
+#mysql CS144 < queries.sql
+#echo "queries done"
 
-# Remove all temporary files
-rm *.csv
+
