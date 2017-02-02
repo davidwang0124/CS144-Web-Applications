@@ -35,9 +35,8 @@ WHERE Rating > 1000;
 
 -- Find the number of users who are both sellers and bidders.
 SELECT count(*)
-FROM (SELECT UserID FROM Seller
-      INTERSECT
-      SELECT UserID FROM Bidder) U;
+FROM (SELECT * FROM Seller, Bidder
+      WHERE Seller.UserID = Bidder.UserID) T;
 
 -- Find the number of categories that include at least one item with a bid of more than $100.
 SELECT count(*)
