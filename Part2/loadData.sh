@@ -27,5 +27,9 @@ echo "Sort done"
 mysql CS144 < load.sql
 echo "Tuples loaded"
 
+# Run the queries.sql batch file to test queries
+mysql CS144 < queries.sql
+echo "queries done"
+
 # Remove all temporary files
 rm *.csv
