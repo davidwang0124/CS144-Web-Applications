@@ -7,7 +7,7 @@ FROM (SELECT UserID FROM Seller
 -- Find the number of items in "New York", (i.e., items whose location is exactly the string "New York"). Pay special attention to case sensitivity. You should match the items in "New York" but not in "new york".
 SELECT count(*)
 FROM Item
-WHERE Location = "New York" COLLATE Latin1_General_CS_AS;
+WHERE Location = "New York" COLLATE utf8_bin;
 
 -- Find the number of auctions belonging to exactly four categories.
 SELECT count(*)
@@ -21,11 +21,11 @@ SELECT ItemID
 FROM Item
 WHERE Currently = (SELECT MAX(Currently)
            FROM Item
-           WHERE Ends > "Dec-20-01 00:00:01"
-           AND Started < "Dec-20-01 00:00:00"
+           WHERE Ends > "2001-12-20 00:00:01"
+           AND Started < "2001-12-20 00:00:00"
            AND NumberofBids > 0)
-AND Ends > "Dec-20-01 00:00:01"
-AND Started < "Dec-20-01 00:00:00"
+AND Ends > "2001-12-20 00:00:01"
+AND Started < "2001-12-20 00:00:00"
 AND NumberofBids > 0;
 
 -- Find the number of sellers whose rating is higher than 1000.
