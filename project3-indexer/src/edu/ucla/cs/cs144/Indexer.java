@@ -96,6 +96,7 @@ public class Indexer {
             indexWriter.addDocument(doc);
 
         } catch (Exception e) {
+            e.printStackTrace();
             System.out.println(e);
         }
 
