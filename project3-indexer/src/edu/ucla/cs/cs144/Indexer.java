@@ -25,14 +25,14 @@ import org.apache.lucene.util.Version;
 public class Indexer {
     private static final String indexDirectory = "/var/lib/lucene/index1";
     private IndexWriter indexWriter = null;
-    
+
     /** Creates a new instance of Indexer */
     public Indexer() {
     }
- 
+
     private IndexWriter getIndexWriter() throws IOException {
         if (indexWriter == null) {
-            Directory indexDir = FSDirectory.open(new File("indexDirectory"));
+            Directory indexDir = FSDirectory.open(new File(indexDirectory));
             IndexWriterConfig config = new IndexWriterConfig(Version.LUCENE_4_10_2, new StandardAnalyzer());
             indexWriter = new IndexWriter(indexDir, config);
         }
@@ -63,12 +63,12 @@ public class Indexer {
          * classes to create an index and populate it with Items data.
          * Read our tutorial on Lucene as well if you don't know how.
          *
-         * As part of this development, you may want to add 
-         * new methods and create additional Java classes. 
+         * As part of this development, you may want to add
+         * new methods and create additional Java classes.
          * If you create new classes, make sure that
          * the classes become part of "edu.ucla.cs.cs144" package
          * and place your class source files at src/edu/ucla/cs/cs144/.
-    	 * 
+    	 *
     	 */
         try {
             conn = DriverManager.getConnection(true);
@@ -110,10 +110,10 @@ public class Indexer {
     	} catch (SQLException ex) {
     	    System.out.println(ex);
     	}
-    }    
+    }
 
     public static void main(String args[]) {
         Indexer idx = new Indexer();
         idx.rebuildIndexes();
-    }   
+    }
 }
