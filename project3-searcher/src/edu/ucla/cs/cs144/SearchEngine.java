@@ -1,4 +1,4 @@
-package lucene.demo.search;
+package edu.ucla.cs.cs144;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -20,8 +20,6 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
 
-import lucene.demo.business.Hotel;
-import lucene.demo.business.HotelDatabase;
 
 public class SearchEngine {
     private IndexSearcher searcher = null;

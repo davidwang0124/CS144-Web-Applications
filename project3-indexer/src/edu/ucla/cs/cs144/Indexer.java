@@ -22,6 +22,8 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.Version;
 
+import edu.ucla.cs.cs144.DbManager;
+
 public class Indexer {
     private static final String indexDirectory = "/var/lib/lucene/index1";
     private IndexWriter indexWriter = null;
@@ -71,11 +73,10 @@ public class Indexer {
     	 *
     	 */
         try {
-            conn = DriverManager.getConnection(true);
             getIndexWriter();
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT ItemID, Name, Description FROM Item");
-            PreparedStatement ps = conn.PreparedStatement("SELECT Category FROM ItemCategory WHERE ItemID = ?");
+            PreparedStatement ps = conn.prepareStatement("SELECT Category FROM ItemCategory WHERE ItemID = ?");
             while (rs.next()) {
                 String itemID = rs.getString("ItemID");
                 String name = rs.getString("Name");
@@ -88,12 +89,13 @@ public class Indexer {
                 }
                 Document doc = new Document();
 
-                doc.add(new StringField("ItemID", itemID, Field.Store.YES));
-                doc.add(new StringField("Name", name, Field.Store.YES));
+                doc.add(new StringField("itemID", itemID, Field.Store.YES));
+                doc.add(new StringField("name", name, Field.Store.YES));
                 String searchContent = name + " " + description + " " + category;
                 doc.add(new TextField("searchContent", searchContent, Field.Store.NO));
+
+                indexWriter.addDocument(doc);
             }
-            indexWriter.addDocument(doc);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -107,7 +109,7 @@ public class Indexer {
                 indexWriter.close();
             }
     	    conn.close();
-    	} catch (SQLException ex) {
+    	} catch (SQLException | IOException ex) {
     	    System.out.println(ex);
     	}
     }
