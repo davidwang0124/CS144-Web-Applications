@@ -7,6 +7,8 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.text.SimpleDateFormat;
 
 import java.sql.PreparedStatement;
@@ -104,10 +106,11 @@ public class AuctionSearch implements IAuctionSearch {
 			// intersect
 			int queryIdx = 0, i = 0;
 			boolean regionExists = regionResults.next();
+			Document doc = null;
 			while (i < total) {
 				while (queryIdx < 2*total && regionExists) {
-					Document doc = se.getDocument(queryResults[queryIdx].doc);
-					int queryId = doc.get("itemID");
+					doc = se.getDocument(queryResults[queryIdx].doc);
+					int queryId = Integer.parseInt(doc.get("itemID"));
 					int regionId = regionResults.getInt("itemId");
 					if (queryId < regionId) {
 						queryIdx++;
@@ -123,7 +126,7 @@ public class AuctionSearch implements IAuctionSearch {
 				}
 				if (queryIdx >= 2*total) {
 					// query again from lucene
-					td = se.performSearchAfter(lastResult, queryString, n);
+					td = se.performSearchAfter(lastResult, query, 2 * total);
 					continue;
 				}
 				// add if there is still vacancy
