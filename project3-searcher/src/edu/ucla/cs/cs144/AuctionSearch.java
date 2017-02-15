@@ -36,19 +36,19 @@ import edu.ucla.cs.cs144.SearchResult;
 public class AuctionSearch implements IAuctionSearch {
 
 	/* 
-         * You will probably have to use JDBC to access MySQL data
-         * Lucene IndexSearcher class to lookup Lucene index.
-         * Read the corresponding tutorial to learn about how to use these.
-         *
+     * You will probably have to use JDBC to access MySQL data
+     * Lucene IndexSearcher class to lookup Lucene index.
+     * Read the corresponding tutorial to learn about how to use these.
+     *
 	 * You may create helper functions or classes to simplify writing these
 	 * methods. Make sure that your helper functions are not public,
-         * so that they are not exposed to outside of this class.
-         *
-         * Any new classes that you create should be part of
-         * edu.ucla.cs.cs144 package and their source files should be
-         * placed at src/edu/ucla/cs/cs144.
-         *
-         */
+     * so that they are not exposed to outside of this class.
+     *
+     * Any new classes that you create should be part of
+     * edu.ucla.cs.cs144 package and their source files should be
+     * placed at src/edu/ucla/cs/cs144.
+     *
+     */
 	
 	public SearchResult[] basicSearch(String query, int numResultsToSkip, 
 			int numResultsToReturn) {
@@ -59,8 +59,9 @@ public class AuctionSearch implements IAuctionSearch {
 			SearchEngine se = new SearchEngine();
 			TopDocs td = se.performSearch(query, total);
 			ScoreDoc[] results = td.scoreDocs;
-
-			for(int i = numResultsToSkip; i < (total > td.totalHits ? total : td.totalHits); i++) {
+			System.out.println("total: " + total);
+			System.out.println("totalHits: " + td.totalHits);
+			for(int i = numResultsToSkip; i < total; i++) {
 				Document doc = se.getDocument(results[i].doc);
 				sr.add(new SearchResult(doc.get("itemID"), doc.get("name")));
 			}

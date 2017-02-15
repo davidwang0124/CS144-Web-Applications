@@ -28,7 +28,7 @@ public class SearchEngine {
     /** Creates a new instance of SearchEngine */
     public SearchEngine() throws IOException {
         searcher = new IndexSearcher(DirectoryReader.open(FSDirectory.open(new File("/var/lib/lucene/index1"))));
-        parser = new QueryParser("content", new StandardAnalyzer());
+        parser = new QueryParser("searchContent", new StandardAnalyzer());
     }
 
     public TopDocs performSearch(String queryString, int n)

@@ -81,7 +81,7 @@ public class Indexer {
                 String itemID = rs.getString("ItemID");
                 String name = rs.getString("Name");
                 String description = rs.getString("Description");
-                String category = null;
+                String category = "";
                 ps.setString(1, itemID);
                 ResultSet result = ps.executeQuery();
                 while (result.next()) {
