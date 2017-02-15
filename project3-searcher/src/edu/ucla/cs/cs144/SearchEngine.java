@@ -14,6 +14,7 @@ import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.TopDocs;
+import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.Sort;
 import org.apache.lucene.store.Directory;
@@ -36,10 +37,10 @@ public class SearchEngine {
         Query query = parser.parse(queryString);
         return searcher.search(query, n);
     }
-    public TopDocs performSearchWithSort(String queryString, int n, Sort sort)
+    public TopDocs performSearchAfter(ScoreDoc after, String queryString, int n)
     throws IOException, ParseException {
         Query query = parser.parse(queryString);
-        return searcher.search(query, n, sort);
+        return searcher.searchAfter(after, query, n);
     }
     public Document getDocument(int docId)
     throws IOException {

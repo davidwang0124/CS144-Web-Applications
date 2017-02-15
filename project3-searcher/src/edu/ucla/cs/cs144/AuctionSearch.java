@@ -10,6 +10,7 @@ import java.util.List;
 import java.text.SimpleDateFormat;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -80,29 +81,57 @@ public class AuctionSearch implements IAuctionSearch {
 			int total = numResultsToSkip + numResultsToReturn;
 			// get sorted items fron lucene
 			SearchEngine se = new SearchEngine();
-			Sort sort = new Sort(new SortField("itemID", SortField.Type.LONG));
-			TopDocs td = se.performSearchWithSort(query, total, sort);
-			ScoreDoc[] results = td.scoreDocs;
+			TopDocs td = se.performSearch(query, 2 * total);
+			ScoreDoc[] queryResults = td.scoreDocs;
+			ScoreDoc lastResult = queryResults[queryResults.length - 1];
+			Arrays.sort(queryResults, new Comparator<ScoreDoc>() {
+				public int compare(ScoreDoc doc1, ScoreDoc doc2) {
+					return doc1.doc.get("itemID") - doc2.doc.get("itemID");
+				}
+			});
+
 			// get sorted items from mysql spatial index
-			try {
-				Connection conn = DbManager.getConnection(true);
-				// create the string for a MySQL geometric polygon for parameter region
-				String polygon = getMySQLPolygon(region.getLx(), region.getLy(), region.getRx(), region.getRy());
-				// prepared statement to test a specific item (by ItemID) for spatial containment in polygon region
-				PreparedStatement checkContains = conn.prepareStatement(
-					"SELECT itemId FROM SpatialItem WHERE " +
-					"" +
-					""
-				);
-			} catch (SQLException ex) {
-				ex.printStackTrace();
-			}
+			Connection conn = DbManager.getConnection(true);
+			String polygon = getMySQLPolygon(region.getLx(), region.getLy(), region.getRx(), region.getRy());
+			PreparedStatement sortedItemsSpatial = conn.prepareStatement(
+				"SELECT itemId FROM SpatialItem WHERE " +
+				"MBRContains(" + polygon + ", position)" +
+				"ORDER BY itemId;"
+			);
+			ResultSet regionResults = sortedItemsSpatial.executeQuery();
 
 			// intersect
-			for(int i = numResultsToSkip; i < total; i++) {
-				Document doc = se.getDocument(results[i].doc);
-				sr.add(new SearchResult(doc.get("itemID"), doc.get("name")));
+			int queryIdx = 0, i = 0;
+			boolean regionExists = regionResults.next();
+			while (i < total) {
+				while (queryIdx < 2*total && regionExists) {
+					Document doc = se.getDocument(queryResults[queryIdx].doc);
+					int queryId = doc.get("itemID");
+					int regionId = regionResults.getInt("itemId");
+					if (queryId < regionId) {
+						queryIdx++;
+					} else if (queryId > regionId) {
+						regionExists = regionResults.next();
+					} else {
+						break;
+					}
+				}
+				// check state
+				if (!regionExists) {
+					break;
+				}
+				if (queryIdx >= 2*total) {
+					// query again from lucene
+					td = se.performSearchAfter(lastResult, queryString, n);
+					continue;
+				}
+				// add if there is still vacancy
+				if (i >= numResultsToSkip) {
+					sr.add(new SearchResult(doc.get("itemID"), doc.get("name")));
+					i++;
+				}
 			}
+
 			return sr.toArray(new SearchResult[sr.size()]);
 		} catch (Exception ex) {
 			ex.printStackTrace();
