@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.text.SimpleDateFormat;
 
+import java.sql.PreparedStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -61,7 +62,7 @@ public class AuctionSearch implements IAuctionSearch {
 			SearchEngine se = new SearchEngine();
 			TopDocs td = se.performSearch(query, total);
 			ScoreDoc[] results = td.scoreDocs;
-			for(int i = numResultsToSkip; i < total; i++) {
+			for(int i = numResultsToSkip; i < (total > results.length ? results.length : total); i++) {
 				Document doc = se.getDocument(results[i].doc);
 				sr.add(new SearchResult(doc.get("itemID"), doc.get("name")));
 			}
@@ -112,6 +113,8 @@ public class AuctionSearch implements IAuctionSearch {
 
 	public String getXMLDataForItemId(String itemId) {
 		// TODO: Your code here!
+
+
 		return "";
 	}
 
