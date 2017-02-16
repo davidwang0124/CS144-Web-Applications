@@ -92,10 +92,9 @@ public class AuctionSearch implements IAuctionSearch {
 			// get sorted items from mysql spatial index
 			Connection conn = DbManager.getConnection(true);
 			String polygon = getMySQLPolygon(region.getLx(), region.getLy(), region.getRx(), region.getRy());
-			System.out.println(polygon);
 			PreparedStatement sortedItemsSpatial = conn.prepareStatement(
 				"SELECT itemId FROM SpatialItem " +
-				// "WHERE MBRContains(" + polygon + ", position) " +
+				"WHERE MBRContains(" + polygon + ", position) " +
 				"ORDER BY itemId;"
 			);
 			ResultSet regionResults = sortedItemsSpatial.executeQuery();
@@ -103,13 +102,13 @@ public class AuctionSearch implements IAuctionSearch {
 			// intersect
 			int queryIdx = 0, i = 0;
 			boolean regionExists = regionResults.next();
-			// System.out.println("regionExists = " + regionExists);
 			Document doc = null;
 			while (i < total) {
-				while (queryIdx < 2*total && regionExists) {
+				while (queryIdx < 2*total && queryIdx < queryResults.length && regionExists) {
 					doc = se.getDocument(queryResults[queryIdx].doc);
 					int queryId = Integer.parseInt(doc.get("itemID"));
 					int regionId = regionResults.getInt("itemId");
+					System.out.println("queryId = " + queryId + ", regionId = " + regionId);
 					if (queryId < regionId) {
 						queryIdx++;
 					} else if (queryId > regionId) {
@@ -121,12 +120,21 @@ public class AuctionSearch implements IAuctionSearch {
 					}
 				}
 				// check state
-				if (!regionExists) {
+				if (!regionExists || (queryIdx >= queryResults.length && queryResults.length < 2*total)) {
 					break;
 				}
 				if (queryIdx >= 2*total) {
 					// query again from lucene
-					td = se.performSearchAfter(lastResult, query, 2 * total);
+					td = se.performSearchAfter(lastResult, query, 2*total);
+					queryResults = td.scoreDocs;
+					queryIdx = 0;
+					System.out.println("search again, length: "+queryResults.length);
+					if (queryResults.length == 0) {
+						break;
+					} else {
+						lastResult = queryResults[queryResults.length - 1];
+					}
+					Arrays.sort(queryResults, new ScoreDocComparator(se));
 					continue;
 				}
 				// add if there is still vacancy
