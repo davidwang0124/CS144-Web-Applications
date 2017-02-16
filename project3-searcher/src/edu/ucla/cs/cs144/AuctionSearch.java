@@ -87,13 +87,8 @@ public class AuctionSearch implements IAuctionSearch {
 			TopDocs td = se.performSearch(query, 2 * total);
 			ScoreDoc[] queryResults = td.scoreDocs;
 			ScoreDoc lastResult = queryResults[queryResults.length - 1];
-			
-			ScoreDocComparator sdComparator = new ScoreDocComparator();
-			Arrays.sort(queryResults, new Comparator<ScoreDoc>() {
-				public int compare(ScoreDoc doc1, ScoreDoc doc2) {
-					return sdComparator(doc1, doc2);
-				}
-			});
+
+			Arrays.sort(queryResults, new ScoreDocComparator());
 
 			// get sorted items from mysql spatial index
 			Connection conn = DbManager.getConnection(true);
