@@ -1,5 +1,5 @@
 -- - Item (__ItemID__, Name, Currently, BuyPrice, FirstBid, NumberofBids,
--- - Location, Latitude, Longtitude, Country, Started, Ends, UserID, Description)
+-- - Location, Latitude, Longitude, Country, Started, Ends, UserID, Description)
 -- - ItemCategory (__ItemID__, __Category__)
 -- - Bid (__UserID__, __Time__, ItemID, Amount)
 -- - Seller (__UserID__, Rating, Location, Country)
@@ -27,7 +27,7 @@ create table Item (
   NumberofBids  INTEGER,
   Location    VARCHAR(50) NOT NULL,
   Latitude    DECIMAL(9,6),
-  Longtitude  DECIMAL(9,6),
+  Longitude  DECIMAL(9,6),
   Country     VARCHAR(50)  NOT NULL,
   Started     TIMESTAMP NOT NULL,
   Ends        TIMESTAMP NOT NULL,

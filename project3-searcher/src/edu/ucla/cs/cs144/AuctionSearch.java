@@ -92,6 +92,7 @@ public class AuctionSearch implements IAuctionSearch {
 			// get sorted items from mysql spatial index
 			Connection conn = DbManager.getConnection(true);
 			String polygon = getMySQLPolygon(region.getLx(), region.getLy(), region.getRx(), region.getRy());
+			System.out.println(polygon);
 			PreparedStatement sortedItemsSpatial = conn.prepareStatement(
 				"SELECT itemId FROM SpatialItem " +
 				// "WHERE MBRContains(" + polygon + ", position) " +

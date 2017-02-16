@@ -3,7 +3,7 @@
 
 Relations:
 - Item (__ItemID__, Name, Currently, BuyPrice, FirstBid, NumberofBids,
-		Location, Latitude, Longtitude, Country, Started, Ends, UserID, Description)
+		Location, Latitude, Longitude, Country, Started, Ends, UserID, Description)
 - ItemCategory (__ItemID__,__Category__)
 - Bid (__UserID__,__Time__, ItemID, Amount)
 - Seller (__UserID__, Rating, Location, Country)
@@ -11,7 +11,7 @@ Relations:
 
 > 2. List all completely nontrivial functional dependencies that hold on each relation, excluding those that effectively specify keys.
 
-- Item: `ItemID -> Name, ItemID -> Currently, ItemID -> Buy_Price, ItemID -> First_Bid, ItemID -> Number_of_Bids, ItemID -> Location, ItemID -> Latitude, ItemID -> Longtitude, ItemID -> Country, ItemID -> Started, ItemID -> Ends, ItemID -> UserID, ItemID -> Description; Location -> Country`
+- Item: `ItemID -> Name, ItemID -> Currently, ItemID -> Buy_Price, ItemID -> First_Bid, ItemID -> Number_of_Bids, ItemID -> Location, ItemID -> Latitude, ItemID -> Longitude, ItemID -> Country, ItemID -> Started, ItemID -> Ends, ItemID -> UserID, ItemID -> Description; Location -> Country`
 - Bid: `UserID, Time -> ItemID; UserID, Time -> Amount`
 - Seller: `UserID -> Rating, UserID -> Location, UserID -> Country, Location -> Country`
 - Bidder: `UserID -> Rating, UserID -> Location, UserID -> Country, Location -> Country`

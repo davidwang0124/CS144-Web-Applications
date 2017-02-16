@@ -6,5 +6,5 @@ CREATE TABLE SpatialItem (
 
 INSERT INTO SpatialItem
 (itemId, position)
-SELECT ItemID, POINT(Latitude, Longtitude)
+SELECT ItemID, POINT(Latitude, Longitude)
 FROM Item;
