@@ -11,6 +11,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.text.SimpleDateFormat;
 
+import java.sql.PreparedStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -154,9 +155,8 @@ public class AuctionSearch implements IAuctionSearch {
 
 	public String getXMLDataForItemId(String itemId) {
 		// TODO: Your code here!
-
-
-		return "";
+		XMLFormat format = new XMLFormat(itemId);
+		return format.convert();
 	}
 
 	public String echo(String message) {
