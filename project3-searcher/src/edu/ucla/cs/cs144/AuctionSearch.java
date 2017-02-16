@@ -128,7 +128,8 @@ public class AuctionSearch implements IAuctionSearch {
 					td = se.performSearchAfter(lastResult, query, 2*total);
 					queryResults = td.scoreDocs;
 					queryIdx = 0;
-					System.out.println("search again, length: "+queryResults.length);
+					regionResults.beforeFirst();
+					regionExists = regionResults.next();
 					if (queryResults.length == 0) {
 						break;
 					} else {
