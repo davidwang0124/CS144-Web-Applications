@@ -11,7 +11,6 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.text.SimpleDateFormat;
 
-import java.sql.PreparedStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -88,14 +87,14 @@ public class AuctionSearch implements IAuctionSearch {
 			ScoreDoc[] queryResults = td.scoreDocs;
 			ScoreDoc lastResult = queryResults[queryResults.length - 1];
 
-			Arrays.sort(queryResults, new ScoreDocComparator());
+			Arrays.sort(queryResults, new ScoreDocComparator(se));
 
 			// get sorted items from mysql spatial index
 			Connection conn = DbManager.getConnection(true);
 			String polygon = getMySQLPolygon(region.getLx(), region.getLy(), region.getRx(), region.getRy());
 			PreparedStatement sortedItemsSpatial = conn.prepareStatement(
-				"SELECT itemId FROM SpatialItem WHERE " +
-				"MBRContains(" + polygon + ", position)" +
+				"SELECT itemId FROM SpatialItem " +
+				// "WHERE MBRContains(" + polygon + ", position) " +
 				"ORDER BY itemId;"
 			);
 			ResultSet regionResults = sortedItemsSpatial.executeQuery();
@@ -103,6 +102,7 @@ public class AuctionSearch implements IAuctionSearch {
 			// intersect
 			int queryIdx = 0, i = 0;
 			boolean regionExists = regionResults.next();
+			// System.out.println("regionExists = " + regionExists);
 			Document doc = null;
 			while (i < total) {
 				while (queryIdx < 2*total && regionExists) {
@@ -114,6 +114,8 @@ public class AuctionSearch implements IAuctionSearch {
 					} else if (queryId > regionId) {
 						regionExists = regionResults.next();
 					} else {
+						queryIdx++;
+						regionExists = regionResults.next();
 						break;
 					}
 				}

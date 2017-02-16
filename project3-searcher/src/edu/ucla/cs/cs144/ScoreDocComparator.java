@@ -1,12 +1,13 @@
 package edu.ucla.cs.cs144;
 
+import java.io.*;
 import java.util.Comparator;
 import org.apache.lucene.search.ScoreDoc;
 
 public class ScoreDocComparator implements Comparator<ScoreDoc> {
 	private SearchEngine se;
 
-	public void ScoreDocComparator (SearchEngine se) {
+	public ScoreDocComparator(SearchEngine se) {
 		this.se = se;
 	}
 
