@@ -33,7 +33,7 @@ public class XMLFormat {
 			ResultSet rs = ps.executeQuery();
 			if(rs.next()) {
 				// item
-				xml += "<Item itemID =" + itemID + ">\n";
+				xml += "<Item ItemID=\"" + itemID + "\">\n";
 
 				// name
 				xml += "<Name>" + escape(rs.getString("Name")) + "</Name>\n";
@@ -56,12 +56,31 @@ public class XMLFormat {
 				xml += "<Number_of_Bids>" + rs.getString("NumberofBids") + "</Number_of_Bids>\n";
 
 				// Bids
-				// PreparedStatement bidsPS = conn.prepareStatement("SELECT * FROM Bid WHERE ItemID = ?");
-				// bidsPS.setString(1, itemID);
-				// ResultSet bidsRS = bidsPS.executeQuery();
-				// while(bidsRS.next()) {
-				// 	//xml += "<Category>" + escape(bidsRS.getString("Category")) + "</Category>";
-				// }
+				PreparedStatement bidsPS = conn.prepareStatement("SELECT * FROM Bid WHERE ItemID = ?");
+				bidsPS.setString(1, itemID);
+				ResultSet bidsRS = bidsPS.executeQuery();
+				xml += "<Bids>\n";
+				while(bidsRS.next()) {
+					xml += "<Bid>\n";
+					String bidderID = escape(bidsRS.getString("UserID"));
+
+					// Bidder
+					PreparedStatement bidderPS = conn.prepareStatement("SELECT * FROM Bidder WHERE UserID = ?");
+					bidderPS.setString(1, bidderID);
+					ResultSet bidderRS = bidderPS.executeQuery();
+					if(bidderRS.next()) {
+						xml += "<Bidder Rating=\"" + escape(bidderRS.getString("Rating")) + "\" UserID=\""
+							+ escape(bidderRS.getString("UserID")) + "\">\n";
+						xml += "<Location>" + escape(bidderRS.getString("Location")) + "</Location>\n";
+						xml += "Country" + escape(bidderRS.getString("Country")) + "</Country>\n";
+						xml += "</Bidder>\n";
+					}
+
+					xml += "<Time>" + escape(dateFormat(bidsRS.getString("Time"))) + "</Time>";
+					xml += "<Amount>$" + bidsRS.getString("Amount") + "</Amount>";
+					xml += "</Bid>\n";
+				}
+				xml += "</Bids>\n";
 
 				// Location
 				if(rs.getString("Latitude").equals("0.000000")) {
