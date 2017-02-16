@@ -84,7 +84,8 @@ public class AuctionSearch implements IAuctionSearch {
 			int total = numResultsToSkip + numResultsToReturn;
 			// get sorted items fron lucene
 			SearchEngine se = new SearchEngine();
-			TopDocs td = se.performSearch(query, 2 * total);
+			int maxSearch = Integer.MAX_VALUE;
+			TopDocs td = se.performSearch(query, maxSearch);
 			ScoreDoc[] queryResults = td.scoreDocs;
 			ScoreDoc lastResult = queryResults[queryResults.length - 1];
 
@@ -105,7 +106,7 @@ public class AuctionSearch implements IAuctionSearch {
 			boolean regionExists = regionResults.next();
 			Document doc = null;
 			while (i < total) {
-				while (queryIdx < 2*total && queryIdx < queryResults.length && regionExists) {
+				while (queryIdx < maxSearch && queryIdx < queryResults.length && regionExists) {
 					doc = se.getDocument(queryResults[queryIdx].doc);
 					int queryId = Integer.parseInt(doc.get("itemID"));
 					int regionId = regionResults.getInt("itemId");
@@ -121,16 +122,17 @@ public class AuctionSearch implements IAuctionSearch {
 					}
 				}
 				// check state
-				if (!regionExists || (queryIdx >= queryResults.length && queryResults.length < 2*total)) {
+				if (!regionExists || (queryIdx >= queryResults.length && queryResults.length < maxSearch)) {
 					break;
 				}
-				if (queryIdx >= 2*total) {
+				if (queryIdx >= maxSearch) {
 					// query again from lucene
-					td = se.performSearchAfter(lastResult, query, 2*total);
+					td = se.performSearchAfter(lastResult, query, maxSearch);
 					queryResults = td.scoreDocs;
 					queryIdx = 0;
 					regionResults.beforeFirst();
 					regionExists = regionResults.next();
+					System.out.println("query again");
 					if (queryResults.length == 0) {
 						break;
 					} else {
