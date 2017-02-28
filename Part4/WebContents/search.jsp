@@ -13,8 +13,7 @@
         <ul class="items">
             <c:forEach items="${searchResults}" var="sr">
                 <li>
-                    <a href="">
-                        <span>${sr.getItemId()}</span>
+                    <a href="/item?id=${sr.getItemId()}">
                         <span>${sr.getName()}</span>
                     </a>
                 </li>
