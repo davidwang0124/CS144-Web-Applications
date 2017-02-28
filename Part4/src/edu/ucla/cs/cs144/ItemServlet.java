@@ -14,5 +14,6 @@ public class ItemServlet extends HttpServlet implements Servlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
         // your codes here
+        request.getRequestDispatcher("/item.jsp").forward(request, response);
     }
 }

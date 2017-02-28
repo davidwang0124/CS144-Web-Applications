@@ -14,5 +14,7 @@ public class SearchServlet extends HttpServlet implements Servlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException
     {
         // your codes here
+        // TODO: parse request for 'next' parameter
+        request.getRequestDispatcher("/search.jsp").forward(request, response);
     }
 }
