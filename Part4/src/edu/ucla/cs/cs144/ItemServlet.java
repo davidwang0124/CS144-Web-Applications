@@ -28,11 +28,11 @@ public class ItemServlet extends HttpServlet implements Servlet {
                 InputSource source = new InputSource(new StringReader(xmlData));
     			Document doc = builder.parse(source);
     			Item item = Parser.parseXML(doc.getDocumentElement());
+                request.setAttribute("item", item);
     		}
     	} catch (Exception ex) {
     		ex.printStackTrace();
     	}
-    	request.setAttribute("item", item);
         request.getRequestDispatcher("/item.jsp").forward(request, response);
     }
 }

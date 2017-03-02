@@ -44,7 +44,7 @@ public class Item {
         this.categories = categories;
     }
 
-    public void setBids(BidResult[] bids) {
+    public void setBids(Bid[] bids) {
         this.bids = bids;
     }
 

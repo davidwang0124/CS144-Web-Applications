@@ -1,6 +1,9 @@
 package edu.ucla.cs.cs144;
 
 import java.util.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import org.w3c.dom.Node;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -9,37 +12,37 @@ import org.w3c.dom.NodeList;
 public class Parser {
 	private static int maxDescriptionLength = 4000;
 
-	private String dateFormat(String input) {
+	private static String dateFormat(String input) {
 		SimpleDateFormat xmlFormat = new SimpleDateFormat("MMM-dd-yy HH:mm:ss");
         SimpleDateFormat sqlFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String ts = "";
         try {
             Date inputDate = xmlFormat.parse(input);
             ts = sqlFormat.format(inputDate);
-        } catch(ParseException pe) {
-            System.out.println("ERROR: could not parse \"" + input + "\"");
-            System.exit(3);
+        } catch(Exception ex) {
+            ex.printStackTrace();
         }
         return ts;
 	}
 
-	private ArrayList<Bid> getBids(Node node) {
+	private static ArrayList<Bid> getBids(Node node) {
 		ArrayList<Bid> bidsList = new ArrayList<Bid>();
 		NodeList bids = node.getChildNodes();
 		for(int i = 0; i < bids.getLength(); i++) {
 			Node n = bids.item(i);
-			String bidderId = n.getAttribute("UserID");
-			String rating = n.getAttribute("Rating");
+			String bidderId = n.getAttributes().getNamedItem("UserID").getNodeValue();
+			String rating = n.getAttributes().getNamedItem("Rating").getNodeValue();
+			String location = "", country = "", time = "", amount = "";
 			switch (n.getNodeName()) {
 				case "Bidder":
-					String location = getNodeText(n.getFirstChild());
-					String country = getNodeText(n.getLastChild());
+					location = getNodeText(n.getFirstChild());
+					country = getNodeText(n.getLastChild());
 					break;
 				case "Time":
-					String time = dateFormat(getNodeText(n));
+					time = dateFormat(getNodeText(n));
 					break;
 				case "Amount":
-					String amount = getNodeText(n);
+					amount = getNodeText(n);
 					break;
 				default:
 					break;
@@ -49,7 +52,7 @@ public class Parser {
 		return bidsList;
 	}
 
-	private String getNodeText(Node node) {
+	private static String getNodeText(Node node) {
 		if(node.getChildNodes().getLength() == 1) {
 			return node.getFirstChild().getNodeValue();
 		} else {
@@ -58,55 +61,57 @@ public class Parser {
 	}
 
 
-	public Item parseXML(Element item) throws Exception {
+	public static Item parseXML(Element item) throws Exception {
 		String id = item.getAttributes().getNamedItem("ItemID").getNodeValue();
 		ArrayList<String> categoriesList = new ArrayList<String>();
 		ArrayList<Bid> bidsList = new ArrayList<Bid>();
-
+		String name = "", currently = "", buyPrice = "", firstBid = "",
+			numberofBids = "", location = "", latitude = "", longitude = "", country = "", 
+			started = "", ends = "", sellerId = "", rating = "", description = "";
 		NodeList nList = item.getChildNodes();
 		for(int i = 0; i < nList.getLength(); i++) {
 			Node node = nList.item(i);
 			switch (node.getNodeName()) {
 				case "Name":
-					String name = getNodeText(node);
+					name = getNodeText(node);
 					break;
 				case "Category":
 					categoriesList.add(getNodeText(node));
 					break;
 				case "Currently":
-					String currently = getNodeText(node);
+					currently = getNodeText(node);
 					break;
 				case "Buy_Price":
-					String buyPrice = getNodeText(node);
+					buyPrice = getNodeText(node);
 					break;
 				case "First_Bid":
-					String firstBid = getNodeText(node);
+					firstBid = getNodeText(node);
 					break;
 				case "Number_of_Bids":
-					String numberofBids = getNodeText(node);
+					numberofBids = getNodeText(node);
 					break;
 				case "Bids":
 					bidsList = getBids(node);
 					break;
 				case "Location":
-					String location = getNodeText(node);
-					String latitude = node.getAttribute("Latitude");
-					String longitude = node.getAttribute("Longitude");
+					location = getNodeText(node);
+					latitude = node.getAttributes().getNamedItem("Latitude").getNodeValue();
+					longitude = node.getAttributes().getNamedItem("Longitude").getNodeValue();
 					break;
 				case "Country":
-					String country = getNodeText(node);
+					country = getNodeText(node);
 					break;
 				case "Started":
-					String started = dateFormat(getNodeText(node));
+					started = dateFormat(getNodeText(node));
 					break;
 				case "Ends":
-					String ends = dateFormat(getNodeText(node));
+					ends = dateFormat(getNodeText(node));
 					break;
 				case "Seller":
-					String sellerId = node.getAttribute("UserID");
-					String rating = node.getAttribute("Rating");
+					sellerId = node.getAttributes().getNamedItem("UserID").getNodeValue();
+					rating = node.getAttributes().getNamedItem("Rating").getNodeValue();
 				case "Description":
-					String description = getNodeText(node);
+					description = getNodeText(node);
 					if(description.length() > maxDescriptionLength)
 						description = description.substring(0, maxDescriptionLength);
 					break;
@@ -115,11 +120,11 @@ public class Parser {
 			}
 		}
 		
-		Item item = new Item(id, name, currently, buyPrice, firstBid, numberofBids, location,
+		Item itemInstance = new Item(id, name, currently, buyPrice, firstBid, numberofBids, location,
 				 latitude, longitude, country, started, ends, sellerId, description);
-		item.setCategories(categoriesList.toArray(new String[categoriesList.size()]));
-		Collections.sort(bidsList);
-        item.setBids(bidsList.toArray(new Bid[bidsList.size()]));
-        return item;
+		itemInstance.setCategories(categoriesList.toArray(new String[categoriesList.size()]));
+		//Collections.sort(bidsList);
+        itemInstance.setBids(bidsList.toArray(new Bid[bidsList.size()]));
+        return itemInstance;
 	}
 }
