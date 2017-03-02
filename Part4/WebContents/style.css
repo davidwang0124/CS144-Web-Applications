@@ -26,13 +26,37 @@ input.search {
     width: 120%;
     left: -10%;
     position: relative;
-    top: 10px;
+    top: 0;
     z-index: 2;
     border-radius: 5px;
     font-size: 40px;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.12), inset 0 0 2px rgba(0, 0, 0, 0.19);
 }
+input.search::placeholder-shown {
+    font-size: 30px;
+}
 
+.button-groups {
+    margin-top: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+.button {
+    flex: 1 0 auto;
+    background: #F7F7F7;
+    color: black;
+    font: 20px "Open Sans", sans-serif;
+    text-align: center;
+    margin: 0;
+    padding: 10px 6px;
+    height: 40px;
+    outline:0;
+    border: 10px #F7F7F7;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.12), inset 0 0 2px rgba(0, 0, 0, 0.19);
+}
 
 .items {
     margin: 0;
