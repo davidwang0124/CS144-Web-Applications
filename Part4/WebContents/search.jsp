@@ -9,7 +9,7 @@
     <form class="search-form">
         <input type="text" class="search"
                name="q" value="${searchText}"
-               placeholder="name/category/description">
+               placeholder="">
         <div class="button-groups">
             <a class="button" href="search?next=1">NEXT</a>
             <button class="button">SEARCH</button>
