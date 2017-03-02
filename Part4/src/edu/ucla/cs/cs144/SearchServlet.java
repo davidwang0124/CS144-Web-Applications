@@ -11,7 +11,6 @@ public class SearchServlet extends HttpServlet implements Servlet {
 
     public SearchServlet() {}
 
-    private Integer k = 20;
     private Integer nextCount = 0;
     private String searchText;
 
@@ -28,6 +27,7 @@ public class SearchServlet extends HttpServlet implements Servlet {
             nextCount = 0;
         }
         if (searchText != null) {
+            int k = 20;
             sr = AuctionSearch.basicSearch(searchText, nextCount * k, (nextCount + 1) * k);
         } else {
             sr = new SearchResult[0];
