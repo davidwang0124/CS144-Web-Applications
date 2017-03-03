@@ -56,23 +56,23 @@
                     <tbody>
                         <tr>
                         <td class="text-left">BidderID</td>
-                        <td class="text-left">${bid.getBidderId()}, </td>
+                        <td class="text-left">${bid.getBidderId()}</td>
                         </tr>
                         <tr>
                         <td class="text-left">Rating</td>
-                        <td class="text-left">{bid.getBidderRating()}, </td>
+                        <td class="text-left">{bid.getBidderRating()}</td>
                         </tr>
                         <tr>
                         <td class="text-left">Location</td>
-                        <td class="text-left">${bid.getBidderLocation()}, </td>
+                        <td class="text-left">${bid.getBidderLocation()}</td>
                         </tr>
                         <tr>
                         <td class="text-left">Country</td>
-                        <td class="text-left">${bid.getBidderCountry()}, </td>
+                        <td class="text-left">${bid.getBidderCountry()}</td>
                         </tr>
                         <tr>
                         <td class="text-left">Time{</td>
-                        <td class="text-left">id.getBidTime()}, </td>
+                        <td class="text-left">id.getBidTime()}</td>
                         </tr>
                         <tr>
                         <td class="text-left">Amount</td>
@@ -127,7 +127,7 @@
         const latitude = dom.dataset.lat;
         const longitude = dom.dataset.lon;
 
-        if (latitude !== undefined && longitude !== undefined) {
+        if (latitude && longitude) {
             const latlng = new google.maps.LatLng(latitude, longitude);
             const myOptions = {
                 zoom: 14, // default is 8
