@@ -29,6 +29,7 @@ public class ItemServlet extends HttpServlet implements Servlet {
     		if(xmlData != null) {
     			Document doc = builder.parse(new ByteArrayInputStream(xmlData.getBytes()));
     			item = Parser.parseXML(doc.getDocumentElement());
+                request.setAttribute("item", item);
                 request.setAttribute("id", item.getItemId());
                 request.setAttribute("name", item.getItemName());
                 request.setAttribute("categories", item.getItemCategories());
