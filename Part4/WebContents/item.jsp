@@ -5,28 +5,9 @@
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="table.css">
-    <script type="text/javascript"
-        src="http://maps.google.com/maps/api/js?sensor=false">
-    </script>
-    <script type="text/javascript">
-        var latitude = ${item.getItemLatitude()};
-        var longitude = ${item.getItemLongitude()};
-        function initialize() {
-            var latlng = new google.maps.LatLng(latitude, longitude);
-            var myOptions = {
-                zoom: 14, // default is 8
-                center: latlng,
-                mapTypeId: google.maps.MapTypeId.ROADMAP
-            };
-            var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
-            var marker = new google.maps.Marker({
-                map: map,
-                position: latlng
-            });
-        }
-    </script>
+    <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
 </head>
-<body onload="initialize()">
+<body>
     <div class="item-container">
         <table class="table-fill">
             <thead>
@@ -135,7 +116,30 @@
             </tr>
             </tbody>
         </table>
-        <div id="map_canvas"></div>
+        <div id="map_canvas"
+             data-lat="${item.getItemLatitude()}"
+             data-lon="${item.getItemLongitude()}">
+        </div>
     </div>
+
+    <script type="text/javascript">
+        const dom = document.getElementById("map_canvas");
+        const latitude = dom.dataset.lat;
+        const longitude = dom.dataset.lon;
+
+        if (latitude !== undefined && longitude !== undefined) {
+            const latlng = new google.maps.LatLng(latitude, longitude);
+            const myOptions = {
+                zoom: 14, // default is 8
+                center: latlng,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            };
+            const map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+            const marker = new google.maps.Marker({
+                map: map,
+                position: latlng
+            });
+        }
+    </script>
 </body>
 </html>
