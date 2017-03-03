@@ -2,67 +2,140 @@
 <html>
 <head>
     <title>Item</title>
-    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" /> 
-	<style type="text/css"> 
-	  html { height: 100% } 
-	  body { height: 100%; margin: 0px; padding: 0px } 
-	  #map_canvas { height: 100% } 
-	</style> 
-	<script type="text/javascript" 
-	    src="http://maps.google.com/maps/api/js?sensor=false"> 
-	</script> 
-	<script type="text/javascript">
-		var latitude = ${item.getItemLatitude()};
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="table.css">
+    <script type="text/javascript"
+        src="http://maps.google.com/maps/api/js?sensor=false">
+    </script>
+    <script type="text/javascript">
+        var latitude = ${item.getItemLatitude()};
         var longitude = ${item.getItemLongitude()};
-		function initialize() { 
-			var latlng = new google.maps.LatLng(latitude, longitude); 
-			var myOptions = { 
-				zoom: 14, // default is 8  
-				center: latlng, 
-				mapTypeId: google.maps.MapTypeId.ROADMAP 
-			}; 
-			var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions); 
-			var marker = new google.maps.Marker({
-				map: map,
-				position: latlng
-			});
-		} 
-	</script>
+        function initialize() {
+            var latlng = new google.maps.LatLng(latitude, longitude);
+            var myOptions = {
+                zoom: 14, // default is 8
+                center: latlng,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            };
+            var map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
+            var marker = new google.maps.Marker({
+                map: map,
+                position: latlng
+            });
+        }
+    </script>
 </head>
-<body onload="initialize()"> 
-	<div id="map_canvas" style="width:30%; height:30%"></div> 
-	<p>id: <%=request.getAttribute("id")%></p>
-	<p>Name: <%=request.getAttribute("name")%></p>
-	<p>
-		<c:forEach items="${categories}" var="category">
-            <li>
-                <span>category: ${category}</span>
-            </li>
-        </c:forEach>
-	</p>
-    <p>currently: <%=request.getAttribute("currently")%></p>
-    <p>buyPrice: <%=request.getAttribute("buyPrice")%></p>
-    <p>firstBid: <%=request.getAttribute("firstBid")%></p>
-    <p>numberofBids: <%=request.getAttribute("numberofBids")%></p>
-    <p>
-		<c:forEach items="${bids}" var="bid">
-            <li>
-                <span>BidderID: ${bid.getBidderId()}, </span>
-                <span>rating: ${bid.getBidderRating()}, </span>
-                <span>location: ${bid.getBidderLocation()}, </span>
-                <span>country: ${bid.getBidderCountry()}, </span>
-				<span>time: ${bid.getBidTime()}, </span>
-                <span>amount: ${bid.getBidAmount()}</span>
-            </li>
-        </c:forEach>
-	</p>
-    <p>location: <%=request.getAttribute("location")%></p>
-    <p>latitude: <%=request.getAttribute("latitude")%></p>
-    <p>longitude: <%=request.getAttribute("longitude")%></p>
-    <p>country: <%=request.getAttribute("country")%></p>
-    <p>started: <%=request.getAttribute("started")%></p>
-    <p>ends: <%=request.getAttribute("ends")%></p>
-    <p>sellerId: <%=request.getAttribute("sellerId")%></p>
-    <p>description: <%=request.getAttribute("description")%></p>
+<body onload="initialize()">
+    <div class="item-container">
+        <table class="table-fill">
+            <thead>
+            <tr>
+            <th class="text-left">Property</th>
+            <th class="text-left">Value</th>
+            </tr>
+            </thead>
+            <tbody class="table-hover">
+            <tr>
+            <td class="text-left">id</td>
+            <td class="text-left"><%=request.getAttribute("id")%></td>
+            </tr>
+            <tr>
+            <td class="text-left">Name</td>
+            <td class="text-left"><%=request.getAttribute("name")%></td>
+            </tr>
+            <tr>
+            <td class="text-left">Category</td>
+            <td class="text-left">
+                <c:forEach items="${categories}" var="category">
+                    <span>${category} </span>
+                </c:forEach>
+            </td>
+            </tr>
+            <tr>
+            <td class="text-left">Currently</td>
+            <td class="text-left"><%=request.getAttribute("currently")%></td>
+            </tr>
+            <tr>
+            <td class="text-left">BuyPrice</td>
+            <td class="text-left"><%=request.getAttribute("buyPrice")%></td>
+            </tr>
+            <tr>
+            <td class="text-left">FirstBid</td>
+            <td class="text-left"><%=request.getAttribute("firstBid")%></td>
+            </tr>
+            <tr>
+            <td class="text-left">NumberofBids</td>
+            <td class="text-left"><%=request.getAttribute("numberofBids")%></td>
+            </tr>
+            <c:forEach items="${bids}" var="bid">
+                <td class="text-left">Bid</td>
+                <td class="nested-td">
+                    <table class="table-fill nested-table">
+                    <tbody>
+                        <tr>
+                        <td class="text-left">BidderID</td>
+                        <td class="text-left">${bid.getBidderId()}, </td>
+                        </tr>
+                        <tr>
+                        <td class="text-left">Rating</td>
+                        <td class="text-left">{bid.getBidderRating()}, </td>
+                        </tr>
+                        <tr>
+                        <td class="text-left">Location</td>
+                        <td class="text-left">${bid.getBidderLocation()}, </td>
+                        </tr>
+                        <tr>
+                        <td class="text-left">Country</td>
+                        <td class="text-left">${bid.getBidderCountry()}, </td>
+                        </tr>
+                        <tr>
+                        <td class="text-left">Time{</td>
+                        <td class="text-left">id.getBidTime()}, </td>
+                        </tr>
+                        <tr>
+                        <td class="text-left">Amount</td>
+                        <td class="text-left">{bid.getBidAmount()}</td>
+                        </tr>
+                    </tbody>
+                    </table>
+                </td>
+            </c:forEach>
+            <tr>
+            <td class="text-left">location</td>
+            <td class="text-left"><%=request.getAttribute("location")%></td>
+            </tr>
+            <tr>
+            <td class="text-left">latitude</td>
+            <td class="text-left"><%=request.getAttribute("latitude")%></td>
+            </tr>
+            <tr>
+            <td class="text-left">longitude</td>
+            <td class="text-left"><%=request.getAttribute("longitude")%></td>
+            </tr>
+            <tr>
+            <td class="text-left">country</td>
+            <td class="text-left"><%=request.getAttribute("country")%></td>
+            </tr>
+            <tr>
+            <td class="text-left">started</td>
+            <td class="text-left"><%=request.getAttribute("started")%></td>
+            </tr>
+            <tr>
+            <td class="text-left">ends</td>
+            <td class="text-left"><%=request.getAttribute("ends")%></td>
+            </tr>
+            <tr>
+            <td class="text-left">sellerId</td>
+            <td class="text-left"><%=request.getAttribute("sellerId")%></td>
+            </tr>
+            <tr>
+            <td class="text-left">description</td>
+            <td class="text-left"><%=request.getAttribute("description")%></td>
+            </tr>
+            </tbody>
+        </table>
+        <div id="map_canvas"></div>
+    </div>
 </body>
 </html>
