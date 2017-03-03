@@ -9,7 +9,7 @@
 <body>
     <form class="search-form">
         <div class="search">
-            <input type="text" name="q" value="${searchText}">
+            <input type="text" name="q" value="${searchText}" autocomplete="off">
             <div class="button-groups">
                 <a class="button" href="search?next=1"><span>↓</span></a>
                 <button class="button">↩︎</button>

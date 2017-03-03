@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import javax.servlet.Servlet;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -20,7 +21,8 @@ public class ProxyServlet extends HttpServlet implements Servlet {
     {
         // your codes here
         String baseUrl = "http://google.com/complete/search?output=toolbar&q=";
-        String query = request.getParameter("q");
+        String rawQuery = request.getParameter("q");
+        String query = URLEncoder.encode(rawQuery, "UTF-8");
         response.setContentType("text/xml");
         PrintWriter out = response.getWriter();
         if (query != null && !query.equals("")) {
