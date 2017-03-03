@@ -19,11 +19,6 @@ public class Bid {
 		this.amount = amount;
 	}
 
-	public int compareTo(Bid other) {
-        // Descending order
-        return other.getBidTime().compareTo(this.getBidTime());
-    }
-
     public String getBidTime() {
         return time;
     }
