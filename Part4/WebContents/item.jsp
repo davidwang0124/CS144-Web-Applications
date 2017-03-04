@@ -61,7 +61,7 @@
                         </tr>
                         <tr>
                         <td class="text-left">Rating</td>
-                        <td class="text-left">{bid.getBidderRating()}</td>
+                        <td class="text-left">${bid.getBidderRating()}</td>
                         </tr>
                         <tr>
                         <td class="text-left">Location</td>
@@ -72,12 +72,12 @@
                         <td class="text-left">${bid.getBidderCountry()}</td>
                         </tr>
                         <tr>
-                        <td class="text-left">Time{</td>
-                        <td class="text-left">id.getBidTime()}</td>
+                        <td class="text-left">Time</td>
+                        <td class="text-left">${bid.getBidTime()}</td>
                         </tr>
                         <tr>
                         <td class="text-left">Amount</td>
-                        <td class="text-left">{bid.getBidAmount()}</td>
+                        <td class="text-left">${bid.getBidAmount()}</td>
                         </tr>
                     </tbody>
                     </table>
