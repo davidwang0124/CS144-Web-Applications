@@ -141,6 +141,14 @@
                 map: map,
                 position: latlng
             });
+        } else {
+        	const latlng = new google.maps.LatLng(34.063509,-118.44541);
+            const myOptions = {
+                zoom: 14, // default is 8
+                center: latlng,
+                mapTypeId: google.maps.MapTypeId.ROADMAP
+            };
+            const map = new google.maps.Map(document.getElementById("map_canvas"), myOptions);
         }
     </script>
 </body>
