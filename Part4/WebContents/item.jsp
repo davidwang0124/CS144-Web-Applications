@@ -50,6 +50,7 @@
             <td class="text-left"><%=request.getAttribute("numberofBids")%></td>
             </tr>
             <c:forEach items="${bids}" var="bid">
+            <tr>
                 <td class="text-left">Bid</td>
                 <td class="nested-td">
                     <table class="table-fill nested-table">
@@ -81,6 +82,7 @@
                     </tbody>
                     </table>
                 </td>
+            </tr>
             </c:forEach>
             <tr>
             <td class="text-left">location</td>
